@@ -2,7 +2,7 @@
 
 Authors:
 
-* Howard Huang <<huangzhipeng@huawei.com>> (@hannibalhuang)
+* Howard Huang <<huangzhipeng@huawei.com>> 
 * Michael Xie <<Haibin.Michael.Xie@huawei.com>> 
 
 ## Notational Conventions
@@ -20,7 +20,7 @@ An implementation is compliant if it satisfies all the MUST, REQUIRED, and SHALL
 |-------------------|--------------------------------------------------|
 | Policy            | A set of rules that will be made available inside of a CO-managed container, via the CPI.                             |                                                 |
 | Volume            | A unit of storage that will be made available inside of a CO-managed container, via the CSI.                          |                                                 |
-| Subnet            | A unit of network that will be made available inside of a CO-managed container, via the CNI.                          |                                                 |
+| Network           | A unit of network that will be made available inside of a CO-managed container, via the CNI.                          |                                                 |
 | Quota             | A limit placed upon the resource usage.                             |                                                 |
 | RPC               | [Remote Procedure Call](https://en.wikipedia.org/wiki/Remote_procedure_call).                                         |
 | Node              | A host where the user workload will be running, uniquely identifiable from the perspective of a Plugin by a `NodeID`. |
@@ -29,11 +29,15 @@ An implementation is compliant if it satisfies all the MUST, REQUIRED, and SHALL
 | Workload          | The atomic unit of "work" scheduled by a CO. This may be a container or a collection of containers.                   |
 
 ## Motivation
-At the moment, there are virtually no policy related functionalities regarding the life cycle management of external resources that is used by CO (e.g. storage, network, devices, ...)
+At the moment, there are many policy related features implemented by various CO. However we do find the following aspects need significant improvement:
 
-There also few policy related feature in the standardized interfaces that these external resources are managed through: CRI/CSI/CNI/CDI. 
+1. There is no reference policy driven architecture which provides a unified view of how policy is enforced on each level by the CO. Furthermore there is also no reference interface that containers implements for the policy enforcement.
 
-Therefore we want to propose a standard container interface that could provide a unified policy enforcement mechanism for the external resources
+2. There are virtually no policy related functionalities regarding the life cycle management of external resources that is used by CO (e.g. storage, network, devices, ...)
+
+3. There also few policy related feature in the standardized interfaces that these external resources are managed through: CRI/CSI/CNI/CDI. Furthermore since for example CNI depends on how the plugin implements the standard, different plugin might cancel out the policy features each implements respectively. 
+
+Therefore we want to propose a standard container interface that could provide a unified policy enforcement mechanism for the CO and its external resources.
 
 ## Objective
 
@@ -45,7 +49,7 @@ The Container Policy Interface (CPI) will
 
 * Enable vendors to write one CPI compliant Plugin that “just works” across all COs that implement CPI.
 * Define API (RPCs) that enable:
-  * TBD.
+  * Storage related policy enforcement.
 * Define plugin protocol RECOMMENDATIONS.
   * Describe a process by which a Supervisor configures a Plugin.
   * Container deployment considerations (`CAP_SYS_ADMIN`, mount namespace, etc.).
@@ -63,13 +67,28 @@ The Container Policy Interface (CPI) explicitly will not define, provide, or dic
 
 ## Solution Overview
 
-This specification defines an interface along with the minimum operational and packaging recommendations for a storage provider (SP) to implement a CPI compatible plugin.
+This specification defines an interface along with the minimum operational and packaging recommendations for a policy aware resource provider (PARP) to implement a CPI compatible plugin.
+
 The interface declares the RPCs that a plugin must expose: this is the **primary focus** of the CPI specification.
 Any operational and packaging recommendations offer additional guidance to promote cross-CO compatibility.
 
 ### Architecture
 
 TBD
+
+### Policy Flavors
+
+## Storage Flavor
+
+* SLA/QoS: service level definitions for virtual pools, physicial pools, etc.
+* Storage System Capability Collection: collecting information on pool, disk, RAID, protocoal, thin provisioning, Tiering, QoS, etc.
+* Resource Reclaim: automatically relaim storage resources
+* Backup/Replication: backup tiering in storage, remote replication
+* HA: high availability for volume/image
+* Profile: profile with description of user service high level requirement on storage
+* Snapshot: periodicall snapshot
+* Taskflow: ensure an order of execution for a given storage resource
+* RBAC: multi-tenancy support
 
 ## Protocol
 
@@ -78,7 +97,7 @@ TBD
 * A CO SHALL communicate with a Plugin using gRPC to access the `Identity`, and (optionally) the `Controller` and `Node` services.
   * proto3 SHOULD be used with gRPC, as per the [official recommendations](http://www.grpc.io/docs/guides/#protocol-buffer-versions).
   * All Plugins SHALL implement the REQUIRED Identity service RPCs.
-    Support for OPTIONAL RPCs is reported by the `ControllerGetCapabilities` and `NodeGetCapabilities` RPC calls.
+    Support for OPTIONAL RPCs is reported by the `ControllerGetPolicies` and `NodeGetPolicies` RPC calls.
 * The CO SHALL provide the listen-address for the Plugin by way of the `CPI_ENDPOINT` environment variable.
   Plugin components SHALL create, bind, and listen for RPCs on the specified listen address.
   * Only UNIX Domain Sockets may be used as endpoints.
@@ -151,7 +170,7 @@ Supervised plugins MAY be isolated and/or resource-bounded.
   * Logging configuration flags and/or variables, including working sample configurations.
   * Default log destination(s) (where do the logs go if no configuration is specified?)
   * Log lifecycle management ownership and related guidance (size limits, rate limits, rolling, archiving, expunging, etc.) applicable to the logging mechanism embedded within the Plugin.
-* Plugins SHOULD NOT write potentially sensitive data to logs (e.g. `Credentials`, `VolumeHandle.Metadata`).
+* Plugins SHOULD NOT write potentially sensitive data to logs (e.g. `Credentials`, `PolicyHandle.Metadata`).
 
 ##### Available Services
 
