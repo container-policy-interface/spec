@@ -1,9 +1,15 @@
 # Container Policy Interface (CPI)
 
+** note a: This is a stub that have many sections copied from the [CSI spec](https://github.com/container-storage-interface/spec) as a base to jumpstart the CPI spec draft. Contents are subject to constant changes.
+
+** note b: The architecture description please refer to the [Policy WG Proposal Doc](https://docs.google.com/document/d/1Ht8wpj4j9YfAA7aVv9Yn3Ci1T_MLMWt0DBr0QmxI2OM/edit?usp=sharing)
+
+** note c: Discussion are encouraged to post on [Policy WG Google Group](https://groups.google.com/forum/#!forum/kubernetes-wg-policy)
+
 Authors:
 
 * Howard Huang <<huangzhipeng@huawei.com>> 
-* Michael Xie <<Haibin.Michael.Xie@huawei.com>> 
+* Torin Sandall <<torin@styra.com>>
 
 ## Notational Conventions
 
@@ -55,15 +61,7 @@ The Container Policy Interface (CPI) will
   * Container deployment considerations (`CAP_SYS_ADMIN`, mount namespace, etc.).
 
 ### Non-Goals in MVP
-
-The Container Policy Interface (CPI) explicitly will not define, provide, or dictate in v0.1:
-
-* Specific mechanisms by which a Plugin Supervisor manages the lifecycle of a Plugin, including:
-  * How to maintain state (e.g. what is attached, mounted, etc.).
-  * How to deploy, install, upgrade, uninstall, monitor, or respawn (in case of unexpected termination) Plugins.
-* Protocol-level authentication and authorization.
-* Packaging of a Plugin.
-* TBD
+TBD
 
 ## Solution Overview
 
@@ -78,7 +76,7 @@ TBD
 
 ### Policy Flavors
 
-## Storage Flavor
+#### Storage Flavor
 
 * SLA/QoS: service level definitions for virtual pools, physicial pools, etc.
 * Storage System Capability Collection: collecting information on pool, disk, RAID, protocoal, thin provisioning, Tiering, QoS, etc.
@@ -88,7 +86,10 @@ TBD
 * Profile: profile with description of user service high level requirement on storage
 * Snapshot: periodicall snapshot
 * Taskflow: ensure an order of execution for a given storage resource
-* RBAC: multi-tenancy support
+
+#### Network Flavor
+
+TBD
 
 ## Protocol
 
