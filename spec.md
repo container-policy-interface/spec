@@ -1,12 +1,12 @@
 # Container Policy Interface (CPI)
 
-** note a: This is a stub that have many sections copied from the [CSI spec](https://github.com/container-storage-interface/spec) as a base to jumpstart the CPI spec draft. Contents are subject to constant changes.
+**note a** : This is a stub that have many sections copied from the [CSI spec](https://github.com/container-storage-interface/spec) as a base to jumpstart the CPI spec draft. Contents are subject to constant changes.
 
-** note b: The architecture description please refer to the [Policy WG Proposal Doc](https://docs.google.com/document/d/1Ht8wpj4j9YfAA7aVv9Yn3Ci1T_MLMWt0DBr0QmxI2OM/edit?usp=sharing)
+**note b**: The architecture description please refer to the [Policy WG Proposal Doc](https://docs.google.com/document/d/1Ht8wpj4j9YfAA7aVv9Yn3Ci1T_MLMWt0DBr0QmxI2OM/edit?usp=sharing)
 
-** note c: Discussion are encouraged to post on [Policy WG Google Group](https://groups.google.com/forum/#!forum/kubernetes-wg-policy)
+**note c**: Discussion are encouraged to post on [Policy WG Google Group](https://groups.google.com/forum/#!forum/kubernetes-wg-policy)
 
-Authors:
+## Authors:
 
 * Howard Huang <<huangzhipeng@huawei.com>> 
 * Torin Sandall <<torin@styra.com>>
