@@ -1,0 +1,38 @@
+apiVersion: v1alpha1
+kind: Tenant
+metadata:
+   name: name
+   labels:
+spec:
+   type: Ownership 
+   node: 
+     org: BU
+     unit: Engineering
+   parent: 
+     org: Corp
+     unit: AcmeCorp
+   quota:
+     period: 
+        start: "* * 9  00 00" 
+        end:   "* * 17 00 00"
+        priority: 5
+        reserve: 
+          resources:
+           cpu: "6"
+           memory: 7Gi
+        shareable:
+         resources:
+           cpu: "2"
+           memory: 1Gi
+     period: 
+        start: "* * 17  00 00" 
+        end:   "* *  8  59 00” 
+        reserve: 
+          resources:
+           cpu: "6"
+           memory: 7Gi
+        shareable:
+         resources:
+           cpu: "2"
+           memory: 1Gi
+       sharepriority: 1
