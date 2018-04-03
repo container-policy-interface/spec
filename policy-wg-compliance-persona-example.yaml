@@ -1,0 +1,27 @@
+apiVersion: data.k8s.io/v1
+kind: DataControlPolicy
+metadata:
+  name: sensitive-data-allowed
+spec:
+#  The policy allows or disallows this kind of information. We would like to adopt a common information standard from the industry; TBD
+  verbs:
+   - read
+   - write
+   - list
+#  This is the kind of information that the policy is relevant to
+  dataClass: 
+  - spi (sensitive personal information)
+  - pii (personal identifiable information)
+  - system(?)
+#  This is the scope of how the policy is applied to my cluster. This is a Cluster-Wide resource (vs. namespace centric) and may reference namespaces or other k8 resources.
+  scope:
+    labelSelectors: []
+    namespaces: []
+#   The following audit requirements must be met for resources impacted by this policy
+  audit:
+  # Need a concise format to capture what kind of auditing requirements must be enforced.
+  # The policy enforcer will then monitor changes to the audit policy for the cluster and flag violations when the audit policy is out of compliance.
+#   This kind of role may access information described by this policy ?? Useful?
+   roles:
+     - admin
+     - edit
